@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long N = 1e5 + 5;
+const long long inf = 1e9 + 5;
+
+vector<array<int, 2> > g[N];
+vector<int> vis(N);
+int cost = 0;
+
+void dfs(int u){
+    int k, adj_vertex = inf;
+    int mn = inf;
+
+    vis[u] = 1;
+
+    cout << u << " ";
+
+    for(auto node : g[u]){
+        int v = node[0];
+        int w = node[1];
+        if(!vis[v]){
+            if(w < mn){
+                mn = w;
+                adj_vertex = v;
+            }
+        }
+    }
+    if(mn != inf) {
+        cost = cost + mn;
+    }
+    if(adj_vertex == inf) {
+        cout << 1;
+        for(auto node : g[u]){
+            if(node[0] == 1){
+                cost += node[1];
+                break;
+            }
+        }
+        return;
+    }
+    dfs(adj_vertex);
+}
+
+int main(){
+    int n, e;
+    cin >> n >> e;
+
+    for(int i = 1; i <= e; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        g[u].push_back({v, w});
+    }
+
+    cout << "Shortest Path: ";
+    dfs(1);
+    cout << "\nMinimum Cost: ";
+    cout << cost;
+
+    return 0;
+}
